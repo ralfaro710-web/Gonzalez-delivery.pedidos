@@ -3,8 +3,9 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#e53935">
+
 <title>González delivery</title>
 
 <style>
@@ -23,12 +24,16 @@ header {
   background: #e53935;
   color: white;
   text-align: center;
-  padding: 26px 16px;
+  padding: 28px 15px;
 }
 
 header h1 {
-  margin: 0 0 8px;
   font-size: 32px;
+  margin: 0 0 8px;
+}
+
+header p {
+  margin: 0;
 }
 
 main {
@@ -39,7 +44,7 @@ main {
 
 .card {
   background: white;
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 22px;
   box-shadow: 0 5px 24px #00000012;
 }
@@ -48,29 +53,35 @@ main {
   background: #fff0ee;
   border: 1px solid #ffd0cc;
   border-radius: 10px;
-  padding: 14px;
+  padding: 15px;
+  font-size: 19px;
   font-weight: bold;
-  font-size: 18px;
 }
 
 label {
   display: block;
   font-weight: bold;
-  margin: 16px 0 7px;
+  margin: 17px 0 7px;
 }
 
 input,
 textarea {
-  display: block;
   width: 100%;
-  padding: 13px;
+  padding: 14px;
   border: 1px solid #ddd;
-  border-radius: 9px;
-  font: inherit;
+  border-radius: 10px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
 }
 
 textarea {
   resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  outline: 2px solid #f5aaa6;
+  border-color: #e53935;
 }
 
 button {
@@ -78,9 +89,9 @@ button {
   background: #e53935;
   color: white;
   border: none;
-  border-radius: 10px;
-  padding: 15px;
-  margin-top: 22px;
+  border-radius: 12px;
+  padding: 17px;
+  margin-top: 23px;
   font-size: 17px;
   font-weight: bold;
   cursor: pointer;
@@ -93,12 +104,12 @@ button:hover {
 .note {
   font-size: 13px;
   color: #666;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 footer {
   text-align: center;
-  padding: 18px;
+  padding: 20px;
   color: #666;
   font-size: 13px;
 }
@@ -107,8 +118,8 @@ footer {
   display: none;
   background: #fff0ee;
   border: 1px solid #e53935;
-  padding: 16px;
   border-radius: 10px;
+  padding: 16px;
 }
 </style>
 </head>
@@ -121,27 +132,31 @@ footer {
 </header>
 
 <main>
+
 <section class="card">
 
 <div id="error" class="error">
-  <strong>Este enlace no corresponde a un restaurante.</strong>
-  <br>
-  Pídele a González delivery el enlace personalizado de tu restaurante.
+  <strong>Restaurante no identificado.</strong>
+  <p>
+    Solicita tu enlace personalizado a González delivery.
+  </p>
 </div>
 
 <form id="pedido">
 
 <label>Restaurante</label>
+
 <div id="restauranteNombre" class="restaurant">
-  Cargando restaurante…
+  Cargando restaurante...
 </div>
 
 <label for="tiempo">
   Tiempo aproximado de preparación
 </label>
+
 <input
+  type="text"
   id="tiempo"
-  name="tiempo"
   placeholder="Ej. 20-30 minutos"
   required
 >
@@ -149,43 +164,44 @@ footer {
 <label for="nombre">
   Nombre del cliente
 </label>
+
 <input
+  type="text"
   id="nombre"
-  name="nombre"
-  autocomplete="name"
   placeholder="Nombre completo"
+  autocomplete="name"
   required
 >
 
 <label for="telefono">
   Teléfono del cliente
 </label>
+
 <input
-  id="telefono"
-  name="telefono"
   type="tel"
-  autocomplete="tel"
+  id="telefono"
   placeholder="Número de teléfono"
+  autocomplete="tel"
   required
 >
 
 <label for="ubicacion">
-  Ubicación o dirección (opcional)
+  Ubicación o dirección
 </label>
+
 <textarea
   id="ubicacion"
-  name="ubicacion"
   rows="3"
   placeholder="Colonia, calle o punto de referencia"
 ></textarea>
 
 <label for="detalles">
-  Detalles del pedido (opcional)
+  Detalles del pedido
 </label>
+
 <textarea
   id="detalles"
-  name="detalles"
-  rows="3"
+  rows="4"
   placeholder="Productos, cantidades e indicaciones"
 ></textarea>
 
@@ -194,12 +210,14 @@ footer {
 </button>
 
 <p class="note">
-  WhatsApp se abrirá con el pedido preparado.
-  Revisa el mensaje y toca Enviar.
+  WhatsApp abrirá el pedido preparado.
+  Revisa el mensaje y presiona Enviar.
 </p>
 
 </form>
+
 </section>
+
 </main>
 
 <footer>
@@ -208,7 +226,9 @@ footer {
 
 <script>
 
+// =================================
 // RESTAURANTES PERSONALIZADOS
+// =================================
 
 const restaurantes = {
 
@@ -233,75 +253,89 @@ const restaurantes = {
 };
 
 
-// IDENTIFICAR RESTAURANTE DEL ENLACE
+// =================================
+// IDENTIFICAR RESTAURANTE
+// =================================
 
-const params = new URLSearchParams(
-  window.location.search
-);
+const parametros =
+  new URLSearchParams(window.location.search);
 
-const slug = params.get("restaurante");
+const slug =
+  parametros.get("restaurante");
 
-const restaurante = restaurantes[slug];
+const restaurante =
+  restaurantes[slug];
 
-const form = document.getElementById("pedido");
+const formulario =
+  document.getElementById("pedido");
 
 
-// MOSTRAR RESTAURANTE PERSONALIZADO
+// =================================
+// MOSTRAR NOMBRE PERSONALIZADO
+// =================================
 
-if (!restaurante) {
-
-  document.getElementById("error").style.display =
-    "block";
-
-  form.style.display = "none";
-
-  document.getElementById("restauranteNombre")
-    .textContent = "Restaurante no identificado";
-
-} else {
+if (restaurante) {
 
   document.getElementById("restauranteNombre")
     .textContent = restaurante;
 
+} else {
+
+  document.getElementById("error")
+    .style.display = "block";
+
+  document.getElementById("restauranteNombre")
+    .textContent = "Restaurante no identificado";
+
+  formulario.style.display = "none";
+
 }
 
 
+// =================================
 // ENVIAR PEDIDO A WHATSAPP
+// =================================
 
-form.addEventListener("submit", function(event) {
+formulario.addEventListener("submit", function(event) {
 
   event.preventDefault();
 
-  if (!restaurante) return;
-
+  if (!restaurante) {
+    return;
+  }
 
   const tiempo =
-    document.getElementById("tiempo").value.trim();
+    document.getElementById("tiempo")
+      .value.trim();
 
   const nombre =
-    document.getElementById("nombre").value.trim();
+    document.getElementById("nombre")
+      .value.trim();
 
   const telefono =
-    document.getElementById("telefono").value.trim();
+    document.getElementById("telefono")
+      .value.trim();
 
   const ubicacion =
-    document.getElementById("ubicacion").value.trim()
-    || "No indicada";
+    document.getElementById("ubicacion")
+      .value.trim() || "No indicada";
 
   const detalles =
-    document.getElementById("detalles").value.trim()
-    || "No indicados";
+    document.getElementById("detalles")
+      .value.trim() || "No indicados";
 
 
   const mensaje = [
 
-    "🚚 NUEVO PEDIDO — GONZÁLEZ DELIVERY",
+    "🚚 NUEVO PEDIDO",
+
+    "GONZÁLEZ DELIVERY",
 
     "",
 
     "🍽️ Restaurante: " + restaurante,
 
-    "⏱️ Preparación aproximada: " + tiempo,
+    "⏱️ Tiempo de preparación: " + tiempo,
 
     "👤 Cliente: " + nombre,
 
@@ -314,12 +348,12 @@ form.addEventListener("submit", function(event) {
   ].join("\n");
 
 
-  const whatsapp =
-    "https://wa.me/50377896089?text="
-    + encodeURIComponent(mensaje);
+  const enlaceWhatsApp =
+    "https://wa.me/50377896089?text=" +
+    encodeURIComponent(mensaje);
 
 
-  window.location.href = whatsapp;
+  window.location.href = enlaceWhatsApp;
 
 });
 
