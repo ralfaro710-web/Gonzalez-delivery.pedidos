@@ -3,14 +3,19 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#e53935">
 <title>González delivery</title>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
+  margin: 0;
   font-family: Arial, sans-serif;
   background: #fff7f5;
-  margin: 0;
   color: #222;
 }
 
@@ -18,53 +23,92 @@ header {
   background: #e53935;
   color: white;
   text-align: center;
-  padding: 25px;
+  padding: 26px 16px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
 }
 
 main {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
+  max-width: 620px;
+  margin: 22px auto;
+  padding: 0 14px;
 }
 
 .card {
   background: white;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px #ddd;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 5px 24px #00000012;
+}
+
+.restaurant {
+  background: #fff0ee;
+  border: 1px solid #ffd0cc;
+  border-radius: 10px;
+  padding: 14px;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 label {
   display: block;
   font-weight: bold;
-  margin-top: 15px;
+  margin: 16px 0 7px;
 }
 
-input, select, textarea {
+input,
+textarea {
+  display: block;
   width: 100%;
-  padding: 12px;
-  margin-top: 7px;
+  padding: 13px;
   border: 1px solid #ddd;
-  border-radius: 8px;
-  box-sizing: border-box;
-  font-size: 16px;
+  border-radius: 9px;
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
 }
 
 button {
   width: 100%;
   background: #e53935;
   color: white;
-  padding: 15px;
   border: none;
   border-radius: 10px;
-  margin-top: 20px;
+  padding: 15px;
+  margin-top: 22px;
   font-size: 17px;
   font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #c62828;
+}
+
+.note {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.45;
 }
 
 footer {
   text-align: center;
-  padding: 20px;
+  padding: 18px;
+  color: #666;
+  font-size: 13px;
+}
+
+.error {
+  display: none;
+  background: #fff0ee;
+  border: 1px solid #e53935;
+  padding: 16px;
+  border-radius: 10px;
 }
 </style>
 </head>
@@ -72,75 +116,213 @@ footer {
 <body>
 
 <header>
-<h1>González delivery 🚚</h1>
-<p>Tu pedido fácil y rápido por WhatsApp</p>
+  <h1>González delivery 🚚</h1>
+  <p>Tu pedido fácil y rápido por WhatsApp</p>
 </header>
 
 <main>
-<div class="card">
+<section class="card">
+
+<div id="error" class="error">
+  <strong>Este enlace no corresponde a un restaurante.</strong>
+  <br>
+  Pídele a González delivery el enlace personalizado de tu restaurante.
+</div>
 
 <form id="pedido">
 
 <label>Restaurante</label>
-<select id="restaurante" required>
-<option value="">Selecciona restaurante</option>
-<option>Meus Meninos🇧🇷</option>
-<option>Crepe Cafe Santa Elena☕️</option>
-<option>Gabo🍖</option>
-<option>Crepe Cafe Parque ☕️</option>
-<option>Antojitos Santa Elena🥮</option>
-<option>Magicos Detalles ✨️</option>
-</select>
+<div id="restauranteNombre" class="restaurant">
+  Cargando restaurante…
+</div>
 
-<label>Tiempo aproximado de preparación</label>
-<input id="tiempo" placeholder="Ej. 20-30 minutos" required>
+<label for="tiempo">
+  Tiempo aproximado de preparación
+</label>
+<input
+  id="tiempo"
+  name="tiempo"
+  placeholder="Ej. 20-30 minutos"
+  required
+>
 
-<label>Nombre del cliente</label>
-<input id="nombre" placeholder="Nombre completo" required>
+<label for="nombre">
+  Nombre del cliente
+</label>
+<input
+  id="nombre"
+  name="nombre"
+  autocomplete="name"
+  placeholder="Nombre completo"
+  required
+>
 
-<label>Teléfono del cliente</label>
-<input id="telefono" type="tel" placeholder="Número de teléfono" required>
+<label for="telefono">
+  Teléfono del cliente
+</label>
+<input
+  id="telefono"
+  name="telefono"
+  type="tel"
+  autocomplete="tel"
+  placeholder="Número de teléfono"
+  required
+>
 
-<label>Ubicación o dirección</label>
-<textarea id="ubicacion" placeholder="Colonia, calle o punto de referencia"></textarea>
+<label for="ubicacion">
+  Ubicación o dirección (opcional)
+</label>
+<textarea
+  id="ubicacion"
+  name="ubicacion"
+  rows="3"
+  placeholder="Colonia, calle o punto de referencia"
+></textarea>
 
-<label>Detalles del pedido</label>
-<textarea id="detalles" placeholder="Productos, cantidades e indicaciones"></textarea>
+<label for="detalles">
+  Detalles del pedido (opcional)
+</label>
+<textarea
+  id="detalles"
+  name="detalles"
+  rows="3"
+  placeholder="Productos, cantidades e indicaciones"
+></textarea>
 
-<button type="submit">Enviar pedido por WhatsApp 📲</button>
+<button type="submit">
+  Enviar pedido por WhatsApp 📲
+</button>
+
+<p class="note">
+  WhatsApp se abrirá con el pedido preparado.
+  Revisa el mensaje y toca Enviar.
+</p>
 
 </form>
-</div>
+</section>
 </main>
 
 <footer>
-González delivery 🚚
+  González delivery 🚚
 </footer>
 
 <script>
-document.getElementById("pedido").addEventListener("submit", function(e) {
-  e.preventDefault();
 
-  const restaurante = document.getElementById("restaurante").value;
-  const tiempo = document.getElementById("tiempo").value;
-  const nombre = document.getElementById("nombre").value;
-  const telefono = document.getElementById("telefono").value;
-  const ubicacion = document.getElementById("ubicacion").value || "No indicada";
-  const detalles = document.getElementById("detalles").value || "No indicados";
+// RESTAURANTES PERSONALIZADOS
 
-  const mensaje =
-    "🚚 NUEVO PEDIDO - GONZÁLEZ DELIVERY\n\n" +
-    "🍽️ Restaurante: " + restaurante + "\n" +
-    "⏱️ Preparación: " + tiempo + "\n" +
-    "👤 Cliente: " + nombre + "\n" +
-    "📞 Teléfono: " + telefono + "\n" +
-    "📍 Ubicación: " + ubicacion + "\n" +
-    "📝 Pedido: " + detalles;
+const restaurantes = {
 
-  const url = "https://wa.me/50377896089?text=" + encodeURIComponent(mensaje);
+  "meus-meninos":
+    "Meus Meninos🇧🇷",
 
-  window.location.href = url;
+  "crepe-santa-elena":
+    "Crepe Cafe Santa Elena☕️",
+
+  "gabo":
+    "Gabo🍖",
+
+  "crepe-parque":
+    "Crepe Cafe Parque ☕️",
+
+  "antojitos-santa-elena":
+    "Antojitos Santa Elena🥮",
+
+  "magicos-detalles":
+    "Magicos Detalles ✨️"
+
+};
+
+
+// IDENTIFICAR RESTAURANTE DEL ENLACE
+
+const params = new URLSearchParams(
+  window.location.search
+);
+
+const slug = params.get("restaurante");
+
+const restaurante = restaurantes[slug];
+
+const form = document.getElementById("pedido");
+
+
+// MOSTRAR RESTAURANTE PERSONALIZADO
+
+if (!restaurante) {
+
+  document.getElementById("error").style.display =
+    "block";
+
+  form.style.display = "none";
+
+  document.getElementById("restauranteNombre")
+    .textContent = "Restaurante no identificado";
+
+} else {
+
+  document.getElementById("restauranteNombre")
+    .textContent = restaurante;
+
+}
+
+
+// ENVIAR PEDIDO A WHATSAPP
+
+form.addEventListener("submit", function(event) {
+
+  event.preventDefault();
+
+  if (!restaurante) return;
+
+
+  const tiempo =
+    document.getElementById("tiempo").value.trim();
+
+  const nombre =
+    document.getElementById("nombre").value.trim();
+
+  const telefono =
+    document.getElementById("telefono").value.trim();
+
+  const ubicacion =
+    document.getElementById("ubicacion").value.trim()
+    || "No indicada";
+
+  const detalles =
+    document.getElementById("detalles").value.trim()
+    || "No indicados";
+
+
+  const mensaje = [
+
+    "🚚 NUEVO PEDIDO — GONZÁLEZ DELIVERY",
+
+    "",
+
+    "🍽️ Restaurante: " + restaurante,
+
+    "⏱️ Preparación aproximada: " + tiempo,
+
+    "👤 Cliente: " + nombre,
+
+    "📞 Teléfono: " + telefono,
+
+    "📍 Ubicación: " + ubicacion,
+
+    "📝 Detalles del pedido: " + detalles
+
+  ].join("\n");
+
+
+  const whatsapp =
+    "https://wa.me/50377896089?text="
+    + encodeURIComponent(mensaje);
+
+
+  window.location.href = whatsapp;
+
 });
+
 </script>
 
 </body>
